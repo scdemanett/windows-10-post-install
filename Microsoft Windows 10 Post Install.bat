@@ -5,6 +5,8 @@ echo ==========================================================================
 echo Disable Hibernation, Uninstall OneDrive, Remove User Folders from This PC, &echo.and Enable Mapped Network Drive(s) With UAC Elevated Permissions.
 echo ==========================================================================
 
+rem Version 1.0
+
 :Check Permissions
 net session >nul 2>&1
 if %errorLevel% == 0 (
