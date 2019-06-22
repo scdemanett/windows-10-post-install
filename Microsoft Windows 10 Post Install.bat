@@ -1,11 +1,11 @@
 @echo off
 title Windows 10 Post Install
 color 1F
-echo ==========================================================================
-echo Disable Hibernation, Uninstall OneDrive, Remove User Folders from This PC, &echo.and Enable Mapped Network Drive(s) With UAC Elevated Permissions.
-echo ==========================================================================
+echo =============================================================================================================
+echo Disable Hibernation, Uninstall OneDrive, Remove User Folders from This PC, Disable Bing Search In Start Menu, &echo.and Enable Mapped Network Drive(s) With UAC Elevated Permissions.
+echo =============================================================================================================
 
-rem Version 1.01
+rem Version 1.02
 
 :Check Permissions
 net session >nul 2>&1
@@ -65,7 +65,7 @@ set input=
 set /p input=Remove User Folders in This PC (64-bit)? (Y/N):
 if "%input%" == "" goto :Remove User Folders
 if /I "%input%" == "y" goto :Remove User Folders Yes
-if /I "%input%" == "n" goto :Enable Linked Connections
+if /I "%input%" == "n" goto :Disable Bing Search
 echo Please type Y or N. & goto :Remove User Folders
 
 :Remove User Folders Yes
@@ -107,6 +107,18 @@ REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explore
 REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{A0953C92-50DC-43bf-BE83-3742FED03C9C}" /f
 REG DELETE "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{f86fa3ab-70d2-4fc7-9c99-fcbf05467f3a}" /f
 
+:Disable Bing Search
+set input=
+set /p input=Disable Bing Search In Start Menu? (Y/N):
+if "%input%" == "" goto :Disable Bing Search
+if /I "%input%" == "y" goto :Disable Bing Search Yes
+if /I "%input%" == "n" goto :Enable Linked Connections
+echo Please type Y or N. & goto :Disable Bing Search
+
+:Disable Bing Search Yes
+REG ADD "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search" /v BingSearchEnabled /t REG_DWORD /d 00000000 /f
+REG ADD "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search" /v CortanaConsent /t REG_DWORD /d 00000000 /f
+
 :Enable Linked Connections
 set input=
 set /p input=Enable Mapped Network Drive(s) With UAC Elevated Permissions? (Y/N):
@@ -123,7 +135,7 @@ echo(
 echo %username%, Windows 10 is ready!
 echo(
 echo Press any key to close . . .
-pause >null
+pause >nul
 goto :End
 
 :Error
@@ -131,6 +143,6 @@ echo(
 echo Please run this as Administrator.
 echo(
 echo Press any key to close . . .
-pause >null
+pause >nul
 
 :End
