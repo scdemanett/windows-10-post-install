@@ -7,12 +7,11 @@ function testAdmin {
 
 if ((testAdmin) -eq $false)  {
     if ($elevated) {
-        # tried to elevate, did not work, aborting
+        Please allow elevation to run properly.
     } 
     else {
         Start-Process powershell.exe -Verb RunAs -ArgumentList ('-noprofile -noexit -file "{0}" -elevated' -f ($myinvocation.MyCommand.Definition))
     }
-
     exit
 }
 
@@ -23,10 +22,10 @@ $host.UI.RawUI.WindowTitle = $title
 
 Write-Host $title
 Write-Host "`n"
-Write-Host "============================================================================================================="
-Write-Host "Disable Hibernation, Uninstall OneDrive, Remove User Folders From This PC, Disable Bing Search In Start Menu,"
-Write-Host "And Enable Mapped Network Drive(s) With UAC Elevated Permissions."
-Write-Host "============================================================================================================="
+Write-Host "====================================================================================================================="
+Write-Host "Disable Bing Search In Start Menu, Disable Hibernation, Enable Mapped Network Drive(s) With UAC Elevated Permissions,"
+Write-Host "Remove User Folders From This PC, Uninstall Edgeium And Uninstall OneDrive."
+Write-Host "====================================================================================================================="
 Write-Host "`n"
 
 # Version 1.00
