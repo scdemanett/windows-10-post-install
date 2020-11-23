@@ -24,7 +24,7 @@ Write-Host $title
 Write-Host "`n"
 Write-Host "====================================================================================================================="
 Write-Host "Disable Bing Search In Start Menu, Disable Hibernation, Enable Mapped Network Drive(s) With UAC Elevated Permissions,"
-Write-Host "Remove User Folders From This PC, Uninstall Edgeium And Uninstall OneDrive."
+Write-Host "Remove User Folders From This PC, Uninstall Edgeium, And Uninstall OneDrive."
 Write-Host "====================================================================================================================="
 Write-Host "`n"
 
