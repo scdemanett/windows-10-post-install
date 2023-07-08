@@ -24,7 +24,7 @@ Write-Host $title
 Write-Host "`n"
 Write-Host "====================================================================================================================="
 Write-Host "Disable Bing Search In Start Menu, Disable Hibernation, Disable Modern Standby,"
-Write-Host "Enable Mapped Network Drive(s) With UAC Elevated Permissions,"
+Write-Host "Set Power Button To Shut Down On Battery & AC Power, Enable Mapped Network Drive(s) With UAC Elevated Permissions,"
 Write-Host "Remove User Folders From This PC, Uninstall Edgeium, And Uninstall OneDrive."
 Write-Host "====================================================================================================================="
 Write-Host "`n"
@@ -37,10 +37,11 @@ function Show-Menu {
     Write-Host "1: Press '1' To Disable Bing Search In Start Menu."
     Write-Host "2: Press '2' To Disable Hibernation."
     Write-Host "3: Press '3' To Disable Modern Standby."
-    Write-Host "4: Press '4' To Enable Mapped Network Drive(s) With UAC Elevated Permissions."
-    Write-Host "5: Press '5' To Remove Users Folders From This PC (64-bit)."
-    Write-Host "6: Press '6' To Uninstall Edgeium."
-    Write-Host "7: Press '7' To Uninstall OneDrive."
+    Write-Host "4: Press '4' To Set Power Button To Shut Down On Battery & AC Power."
+    Write-Host "5: Press '5' To Enable Mapped Network Drive(s) With UAC Elevated Permissions."
+    Write-Host "6: Press '6' To Remove Users Folders From This PC (64-bit)."
+    Write-Host "7: Press '7' To Uninstall Edgeium."
+    Write-Host "8: Press '8' To Uninstall OneDrive."
     Write-Host "A: Press 'A' To Run All."
     Write-Host "Q: Press 'Q' To Quit."
     Write-Host "`n"
@@ -63,6 +64,13 @@ function disableHibernation {
 function disableModernStandby {
     Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Power" -Name "PlatformAoAcOverride" -Value 00000000 -Type "DWORD" -Force -ErrorAction SilentlyContinue
     Write-Host "Modern Standby Off, Please Reboot."
+    Write-Host "`n"
+}
+
+function setPowerButton {
+    Set-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\Power\PowerSettings\7648EFA3-DD9C-4E3E-B566-50F929386280" -Name "ACSettingIndex" -Value 00000003 -Type "DWORD" -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\Power\PowerSettings\7648EFA3-DD9C-4E3E-B566-50F929386280" -Name "DCSettingIndex" -Value 00000003 -Type "DWORD" -Force -ErrorAction SilentlyContinue
+    Write-Host "Power Button Will Now Shutdown On Battery And AC Power."
     Write-Host "`n"
 }
 
@@ -173,6 +181,7 @@ function runAll {
     disableBing
     disableHibernation
     disableModernStandby
+    setPowerButton
     enableMappedDrives
     removeUsersFolders
     uninstallEdge
@@ -192,12 +201,14 @@ do {
         } '3' {
             disableModernStandby
         } '4' {
-            enableMappedDrives
+            setPowerButton
         } '5' {
-            removeUsersFolders
+            enableMappedDrives
         } '6' {
-            uninstallEdge
+            removeUsersFolders
         } '7' {
+            uninstallEdge
+        } '8' {
             uninstallOneDrive
         } 'a' {
             runAll
