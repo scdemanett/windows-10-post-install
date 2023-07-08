@@ -23,22 +23,24 @@ $host.UI.RawUI.WindowTitle = $title
 Write-Host $title
 Write-Host "`n"
 Write-Host "====================================================================================================================="
-Write-Host "Disable Bing Search In Start Menu, Disable Hibernation, Enable Mapped Network Drive(s) With UAC Elevated Permissions,"
+Write-Host "Disable Bing Search In Start Menu, Disable Hibernation, Disable Modern Standby,"
+Write-Host "Enable Mapped Network Drive(s) With UAC Elevated Permissions,"
 Write-Host "Remove User Folders From This PC, Uninstall Edgeium, And Uninstall OneDrive."
 Write-Host "====================================================================================================================="
 Write-Host "`n"
 
-# Version 1.00
+# Version 1.10
 
 # Main menu, allowing user selection
 function Show-Menu {
     Write-Host "================ $title ================"
     Write-Host "1: Press '1' To Disable Bing Search In Start Menu."
     Write-Host "2: Press '2' To Disable Hibernation."
-    Write-Host "3: Press '3' To Enable Mapped Network Drive(s) With UAC Elevated Permissions."
-    Write-Host "4: Press '4' To Remove Users Folders From This PC (64-bit)."
-    Write-Host "5: Press '5' To Uninstall Edgeium."
-    Write-Host "6: Press '6' To Uninstall OneDrive."
+    Write-Host "3: Press '3' To Disable Modern Standby."
+    Write-Host "4: Press '4' To Enable Mapped Network Drive(s) With UAC Elevated Permissions."
+    Write-Host "5: Press '5' To Remove Users Folders From This PC (64-bit)."
+    Write-Host "6: Press '6' To Uninstall Edgeium."
+    Write-Host "7: Press '7' To Uninstall OneDrive."
     Write-Host "A: Press 'A' To Run All."
     Write-Host "Q: Press 'Q' To Quit."
     Write-Host "`n"
@@ -55,6 +57,12 @@ function disableBing {
 function disableHibernation {
     powercfg /hibernate off
     Write-Host "Hibernation Off."
+    Write-Host "`n"
+}
+
+function disableModernStandby {
+    Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Power" -Name "PlatformAoAcOverride" -Value 00000000 -Type "DWORD" -Force -ErrorAction SilentlyContinue
+    Write-Host "Modern Standby Off, Please Reboot."
     Write-Host "`n"
 }
 
@@ -164,6 +172,7 @@ function uninstallOneDrive {
 function runAll {
     disableBing
     disableHibernation
+    disableModernStandby
     enableMappedDrives
     removeUsersFolders
     uninstallEdge
@@ -181,12 +190,14 @@ do {
         } '2' {
             disableHibernation
         } '3' {
-            enableMappedDrives
+            disableModernStandby
         } '4' {
-            removeUsersFolders
+            enableMappedDrives
         } '5' {
-            uninstallEdge
+            removeUsersFolders
         } '6' {
+            uninstallEdge
+        } '7' {
             uninstallOneDrive
         } 'a' {
             runAll
