@@ -25,7 +25,7 @@ Write-Host "`n"
 Write-Host "====================================================================================================================="
 Write-Host "Disable Bing Search In Start Menu, Disable Hibernation, Disable Modern Standby,"
 Write-Host "Set Power Button To Shut Down On Battery & AC Power, Enable Mapped Network Drive(s) With UAC Elevated Permissions,"
-Write-Host "Remove User Folders From This PC, Uninstall Edgeium, And Uninstall OneDrive."
+Write-Host "Enabled Long Paths, Remove User Folders From This PC, Uninstall Edgeium, And Uninstall OneDrive."
 Write-Host "====================================================================================================================="
 Write-Host "`n"
 
@@ -39,9 +39,10 @@ function Show-Menu {
     Write-Host "3: Press '3' To Disable Modern Standby."
     Write-Host "4: Press '4' To Set Power Button To Shut Down On Battery & AC Power."
     Write-Host "5: Press '5' To Enable Mapped Network Drive(s) With UAC Elevated Permissions."
-    Write-Host "6: Press '6' To Remove Users Folders From This PC (64-bit)."
-    Write-Host "7: Press '7' To Uninstall Edgeium."
-    Write-Host "8: Press '8' To Uninstall OneDrive."
+    Write-Host "6: Press '6' To Enable Long Paths."
+    Write-Host "7: Press '7' To Remove Users Folders From This PC (64-bit)."
+    Write-Host "8: Press '8' To Uninstall Edgeium."
+    Write-Host "9: Press '9' To Uninstall OneDrive."
     Write-Host "A: Press 'A' To Run All."
     Write-Host "Q: Press 'Q' To Quit."
     Write-Host "`n"
@@ -77,6 +78,12 @@ function setPowerButton {
 function enableMappedDrives {
     Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "EnableLinkedConnections" -Value 00000001 -Force
     Write-Host "Mapped Network Drive(s) Enabled With UAC Elevated Permissions."
+    Write-Host "`n"
+}
+
+function enableLongPaths {
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 00000001 -Type "DWORD" -Force
+    Write-Host "Long Paths Now Enabled, Please Reboot."
     Write-Host "`n"
 }
 
@@ -183,6 +190,7 @@ function runAll {
     disableModernStandby
     setPowerButton
     enableMappedDrives
+    enableLongPaths
     removeUsersFolders
     uninstallEdge
     uninstallOneDrive
@@ -205,10 +213,12 @@ do {
         } '5' {
             enableMappedDrives
         } '6' {
-            removeUsersFolders
+            enableLongPaths
         } '7' {
-            uninstallEdge
+            removeUsersFolders
         } '8' {
+            uninstallEdge
+        } '9' {
             uninstallOneDrive
         } 'a' {
             runAll
